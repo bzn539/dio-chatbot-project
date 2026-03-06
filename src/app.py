@@ -1,7 +1,6 @@
 import streamlit as st
 from agente import stream_chat
 
-# ── Configuração da página ──────────────────────────────────────────────────
 st.set_page_config(
     page_title="Cleo",
     page_icon="🎬",
@@ -9,272 +8,295 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── CSS customizado ─────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #0e0e0e;
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, [class*="css"], .stApp {
+    font-family: 'Inter', sans-serif;
+    background-color: #111 !important;
     color: #f0ece4;
 }
 
-.stApp {
-    background-color: #0e0e0e;
+#MainMenu, footer, header, .stDeployButton,
+[data-testid="stToolbar"], [data-testid="stDecoration"],
+[data-testid="stStatusWidget"] { display: none !important; }
+
+.block-container {
+    max-width: 700px !important;
+    padding: 0 1.5rem 7rem 1.5rem !important;
 }
 
-/* Header */
+/* ── HEADER ── */
 .cleo-header {
     text-align: center;
-    padding: 2.5rem 0 1.5rem 0;
-    border-bottom: 1px solid #2a2a2a;
+    padding: 3rem 0 2rem 0;
+    border-bottom: 1px solid #222;
     margin-bottom: 2rem;
 }
-
 .cleo-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 3rem;
-    letter-spacing: -1px;
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -3px;
     color: #f0ece4;
-    margin: 0;
     line-height: 1;
 }
-
-.cleo-title span {
+.cleo-title em {
+    font-style: italic;
     color: #e8643a;
 }
-
 .cleo-subtitle {
-    font-size: 0.85rem;
-    color: #666;
-    letter-spacing: 0.15em;
+    font-size: 0.78rem;
+    color: #444;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
 }
 
-/* Chat messages */
+/* ── MENSAGENS ── */
 .message-user {
     display: flex;
     justify-content: flex-end;
-    margin: 0.75rem 0;
+    margin: 0.6rem 0;
 }
-
 .message-cleo {
     display: flex;
     justify-content: flex-start;
-    margin: 0.75rem 0;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin: 0.6rem 0;
 }
-
 .bubble-user {
     background: #e8643a;
     color: #fff;
-    padding: 0.75rem 1.1rem;
-    border-radius: 18px 18px 4px 18px;
-    max-width: 75%;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    padding: 0.7rem 1rem;
+    border-radius: 16px 16px 3px 16px;
+    max-width: 72%;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    word-wrap: break-word;
 }
-
 .bubble-cleo {
-    background: #1a1a1a;
+    background: #1c1c1c;
     color: #f0ece4;
-    padding: 0.75rem 1.1rem;
-    border-radius: 18px 18px 18px 4px;
-    max-width: 75%;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    padding: 0.7rem 1rem;
+    border-radius: 16px 16px 16px 3px;
+    max-width: 72%;
+    font-size: 0.92rem;
+    line-height: 1.65;
     border: 1px solid #2a2a2a;
+    word-wrap: break-word;
+}
+.cleo-avatar {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-bottom: 2px;
 }
 
-.avatar {
-    font-size: 1.2rem;
-    margin-right: 0.5rem;
-    align-self: flex-end;
-}
-
-/* Sugestões rápidas */
-.quick-chips {
+/* ── INDICADOR DE DIGITANDO ── */
+.typing-dots {
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    gap: 4px;
+    padding: 0.2rem 0;
+}
+.typing-dots span {
+    width: 7px;
+    height: 7px;
+    background: #555;
+    border-radius: 50%;
+    animation: bounce 1.2s infinite ease-in-out;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-5px); opacity: 1; }
 }
 
-/* Input */
-.stTextInput > div > div > input {
-    background-color: #1a1a1a !important;
-    border: 1px solid #2a2a2a !important;
-    border-radius: 12px !important;
-    color: #f0ece4 !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 0.95rem !important;
-    padding: 0.75rem 1rem !important;
+/* ── SUGESTÕES ── */
+.suggestions-label {
+    color: #444;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    text-align: center;
 }
-
-.stTextInput > div > div > input:focus {
-    border-color: #e8643a !important;
-    box-shadow: 0 0 0 2px rgba(232, 100, 58, 0.15) !important;
-}
-
-.stTextInput > div > div > input::placeholder {
-    color: #555 !important;
-}
-
-/* Botão enviar */
-.stButton > button {
-    background-color: #e8643a !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 12px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-weight: 500 !important;
-    padding: 0.6rem 1.4rem !important;
-    transition: background 0.2s ease !important;
-}
-
-.stButton > button:hover {
-    background-color: #d0512a !important;
-}
-
-/* Botões de sugestão */
-.suggestion-btn > button {
-    background-color: #1a1a1a !important;
-    color: #aaa !important;
+div[data-testid="column"] .stButton > button {
+    background-color: #1c1c1c !important;
+    color: #888 !important;
     border: 1px solid #2a2a2a !important;
     border-radius: 20px !important;
-    font-size: 0.8rem !important;
-    padding: 0.3rem 0.9rem !important;
+    font-size: 0.78rem !important;
+    font-family: 'Inter', sans-serif !important;
+    padding: 0.4rem 0.8rem !important;
+    width: 100% !important;
+    white-space: normal !important;
+    height: auto !important;
+    line-height: 1.4 !important;
 }
-
-.suggestion-btn > button:hover {
+div[data-testid="column"] .stButton > button:hover {
     border-color: #e8643a !important;
     color: #e8643a !important;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #0e0e0e; }
-::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+/* ── BOTÃO LIMPAR ── */
+.stButton > button {
+    background-color: transparent !important;
+    color: #444 !important;
+    border: 1px solid #222 !important;
+    border-radius: 8px !important;
+    font-size: 0.78rem !important;
+    font-family: 'Inter', sans-serif !important;
+}
+.stButton > button:hover {
+    color: #888 !important;
+    border-color: #333 !important;
+}
 
-/* Remove streamlit defaults */
-#MainMenu, footer, header { visibility: hidden; }
-.block-container { padding-top: 1rem; padding-bottom: 2rem; max-width: 720px; }
+/* ── CHAT INPUT — remove fundo azul e estilos nativos ── */
+[data-testid="stBottom"] {
+    background-color: #111 !important;
+    border-top: 1px solid #1e1e1e !important;
+    padding: 0.75rem 0 !important;
+}
+[data-testid="stBottom"] > div {
+    background-color: #111 !important;
+}
+[data-testid="stChatInputContainer"] {
+    background-color: #1c1c1c !important;
+    border: 1px solid #2a2a2a !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+}
+[data-testid="stChatInputContainer"]:focus-within {
+    border-color: #e8643a !important;
+    box-shadow: 0 0 0 2px rgba(232,100,58,0.1) !important;
+}
+[data-testid="stChatInputContainer"] textarea {
+    background-color: transparent !important;
+    color: #f0ece4 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.92rem !important;
+    caret-color: #e8643a !important;
+}
+[data-testid="stChatInputContainer"] textarea::placeholder {
+    color: #444 !important;
+}
+[data-testid="stChatInputContainer"] button[kind="primaryFormSubmit"],
+[data-testid="stChatInputContainer"] button {
+    background-color: #e8643a !important;
+    border-radius: 8px !important;
+    border: none !important;
+    color: white !important;
+}
+[data-testid="stChatInputContainer"] button:hover {
+    background-color: #d0512a !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
 </style>
 """, unsafe_allow_html=True)
 
-# ── Header ──────────────────────────────────────────────────────────────────
+# ── Header ────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="cleo-header">
-    <p class="cleo-title">Cle<span>o</span></p>
-    <p class="cleo-subtitle">filmes · séries · livros</p>
+    <div class="cleo-title">Cl<em>e</em>o</div>
+    <div class="cleo-subtitle">filmes · séries · livros</div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── Estado da sessão ────────────────────────────────────────────────────────
+# ── Estado ────────────────────────────────────────────────────────────────────
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if "input_key" not in st.session_state:
-    st.session_state.input_key = 0
-
-# ── Renderizar histórico ────────────────────────────────────────────────────
+# ── Histórico ─────────────────────────────────────────────────────────────────
 for msg in st.session_state.messages:
     if msg["role"] == "user":
         st.markdown(f"""
         <div class="message-user">
             <div class="bubble-user">{msg["content"]}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        </div>""", unsafe_allow_html=True)
     else:
+        content = msg["content"].replace("\n", "<br>")
         st.markdown(f"""
         <div class="message-cleo">
-            <span class="avatar">🎬</span>
-            <div class="bubble-cleo">{msg["content"]}</div>
-        </div>
-        """, unsafe_allow_html=True)
+            <span class="cleo-avatar">🎬</span>
+            <div class="bubble-cleo">{content}</div>
+        </div>""", unsafe_allow_html=True)
 
-# ── Sugestões rápidas (só mostra se não tem histórico) ──────────────────────
+# ── Sugestões rápidas ─────────────────────────────────────────────────────────
 suggestions = [
-    "Quero um filme pra hoje à noite 🌙",
+    "Quero um filme pra hoje à noite",
     "Série que prende desde o primeiro ep",
-    "Livro pra ler na praia",
+    "Livro pra quem não tem paciência",
     "Algo de terror psicológico",
 ]
 
 if not st.session_state.messages:
-    st.markdown("""
-    <p style="color:#555; font-size:0.85rem; margin-bottom:0.5rem;">Algumas ideias pra começar:</p>
-    """, unsafe_allow_html=True)
-    
-    cols = st.columns(len(suggestions))
-    for i, (col, suggestion) in enumerate(zip(cols, suggestions)):
+    st.markdown('<p class="suggestions-label">por onde começar</p>', unsafe_allow_html=True)
+    cols = st.columns(4)
+    for i, (col, s) in enumerate(zip(cols, suggestions)):
         with col:
-            with st.container():
-                st.markdown('<div class="suggestion-btn">', unsafe_allow_html=True)
-                if st.button(suggestion, key=f"suggest_{i}"):
-                    st.session_state.messages.append({"role": "user", "content": suggestion})
-                    response = ""
-                    for chunk in stream_chat(st.session_state.messages):
-                        response += chunk
-                    st.session_state.messages.append({"role": "assistant", "content": response})
-                    st.rerun()
-                st.markdown('</div>', unsafe_allow_html=True)
+            if st.button(s, key=f"sug_{i}"):
+                st.session_state.messages.append({"role": "user", "content": s})
+                response = ""
+                for chunk in stream_chat(st.session_state.messages):
+                    response += chunk
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                st.rerun()
 
-# ── Input do usuário ────────────────────────────────────────────────────────
-st.markdown("<div style='height: 1.5rem'></div>", unsafe_allow_html=True)
+# ── Botão limpar ──────────────────────────────────────────────────────────────
+if st.session_state.messages:
+    col1, col2, col3 = st.columns([3, 1, 3])
+    with col2:
+        if st.button("↺ limpar", key="clear"):
+            st.session_state.messages = []
+            st.rerun()
 
-col_input, col_btn = st.columns([5, 1])
+# ── Input fixo no rodapé ──────────────────────────────────────────────────────
+user_input = st.chat_input("O que você quer assistir ou ler?")
 
-with col_input:
-    user_input = st.text_input(
-        label="",
-        placeholder="O que você quer assistir ou ler?",
-        key=f"input_{st.session_state.input_key}",
-        label_visibility="collapsed",
-    )
-
-with col_btn:
-    send = st.button("→", use_container_width=True)
-
-# ── Processar envio ─────────────────────────────────────────────────────────
-if (send or user_input) and user_input.strip():
+if user_input and user_input.strip():
     st.session_state.messages.append({"role": "user", "content": user_input.strip()})
 
-    # Renderiza mensagem do usuário imediatamente
     st.markdown(f"""
     <div class="message-user">
         <div class="bubble-user">{user_input.strip()}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
 
-    # Stream da resposta
-    with st.empty():
-        response = ""
-        placeholder = st.markdown("""
-        <div class="message-cleo">
-            <span class="avatar">🎬</span>
-            <div class="bubble-cleo">...</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        for chunk in stream_chat(st.session_state.messages):
-            response += chunk
-            st.markdown(f"""
-            <div class="message-cleo">
-                <span class="avatar">🎬</span>
-                <div class="bubble-cleo">{response}▌</div>
+    # Indicador de "pensando" antes do primeiro chunk
+    placeholder = st.empty()
+    placeholder.markdown("""
+    <div class="message-cleo">
+        <span class="cleo-avatar">🎬</span>
+        <div class="bubble-cleo">
+            <div class="typing-dots">
+                <span></span><span></span><span></span>
             </div>
-            """, unsafe_allow_html=True)
+        </div>
+    </div>""", unsafe_allow_html=True)
+
+    response = ""
+    for chunk in stream_chat(st.session_state.messages):
+        response += chunk
+        placeholder.markdown(f"""
+        <div class="message-cleo">
+            <span class="cleo-avatar">🎬</span>
+            <div class="bubble-cleo">{response.replace(chr(10), "<br>")}▌</div>
+        </div>""", unsafe_allow_html=True)
+
+    placeholder.markdown(f"""
+    <div class="message-cleo">
+        <span class="cleo-avatar">🎬</span>
+        <div class="bubble-cleo">{response.replace(chr(10), "<br>")}</div>
+    </div>""", unsafe_allow_html=True)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
-    st.session_state.input_key += 1
-    st.rerun()
-
-# ── Botão limpar conversa ───────────────────────────────────────────────────
-if st.session_state.messages:
-    st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
-    if st.button("↺ limpar conversa", key="clear"):
-        st.session_state.messages = []
-        st.session_state.input_key += 1
-        st.rerun()
