@@ -2,54 +2,38 @@
 
 ## Dados Utilizados
 
-Descreva se usou os arquivos da pasta `data`, por exemplo:
+A Cleo não utiliza arquivos de dados externos — a base de conhecimento é o próprio modelo Mistral, que contém um amplo repertório de filmes, séries e livros até sua data de corte.
 
-| Arquivo | Formato | Utilização no Agente |
-|---------|---------|---------------------|
-| `historico_atendimento.csv` | CSV | Contextualizar interações anteriores |
-| `perfil_investidor.json` | JSON | Personalizar recomendações |
-| `produtos_financeiros.json` | JSON | Sugerir produtos adequados ao perfil |
-| `transacoes.csv` | CSV | Analisar padrão de gastos do cliente |
-
-> [!TIP]
-> **Quer um dataset mais robusto?** Você pode utilizar datasets públicos do [Hugging Face](https://huggingface.co/datasets) relacionados a finanças, desde que sejam adequados ao contexto do desafio.
-
----
-
-## Adaptações nos Dados
-
-> Você modificou ou expandiu os dados mockados? Descreva aqui.
-
-[Sua descrição aqui]
+| Fonte | Formato | Utilização |
+|-------|---------|------------|
+| Modelo Mistral (via Ollama) | LLM local | Recomendações, descrições, contexto de títulos |
+| Histórico da conversa | Memória de sessão (lista Python) | Manter contexto e evitar repetição de sugestões |
 
 ---
 
 ## Estratégia de Integração
 
-### Como os dados são carregados?
-> Descreva como seu agente acessa a base de conhecimento.
+### Como o contexto é mantido?
+O histórico completo da conversa é enviado a cada requisição para o Ollama, no formato `messages: [{role, content}]`. Isso permite que o modelo saiba o que já foi sugerido e ajuste as próximas recomendações.
 
-[ex: Os JSON/CSV são carregados no início da sessão e incluídos no contexto do prompt]
-
-### Como os dados são usados no prompt?
-> Os dados vão no system prompt? São consultados dinamicamente?
-
-[Sua descrição aqui]
+### Como o system prompt é usado?
+O system prompt é injetado como primeira mensagem de sistema em cada requisição. Ele define a personalidade, as regras de comportamento e o formato esperado das respostas.
 
 ---
 
 ## Exemplo de Contexto Montado
 
-> Mostre um exemplo de como os dados são formatados para o agente.
-
 ```
-Dados do Cliente:
-- Nome: João Silva
-- Perfil: Moderado
-- Saldo disponível: R$ 5.000
+[system]: Você é a Cleo, uma assistente de recomendação...
 
-Últimas transações:
-- 01/11: Supermercado - R$ 450
-- 03/11: Streaming - R$ 55
-...
+[user]: Quero um filme pra hoje à noite, tô cansado
+
+[assistant]: Algo mais leve então? Algum gênero preferido, ou pode ser qualquer coisa contanto que não precise de muita atenção?
+
+[user]: Pode ser comédia ou drama, não muito longo
+
+[assistant]: Três opções:
+- A Vida é Bela (1997) — drama com momentos de leveza, não é pesado apesar do tema
+- Simplesmente Amor (2003) — comédia romântica fácil de assistir, funciona bem no cansaço
+- Ela (2013) — drama tranquilo, ritmo lento no bom sentido
 ```

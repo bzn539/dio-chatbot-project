@@ -1,29 +1,32 @@
 # Pitch (3 minutos)
 
-> [!TIP]
-> Você pode usar alguns slides pra apoiar no seu Pitch e mostrar sua solução na prática.
- 
-## Roteiro Sugerido
+## Roteiro
 
 ### 1. O Problema (30 seg)
-> Qual dor do cliente você resolve?
+Você abre o streaming, passa 20 minutos rolando o feed e fecha sem escolher nada. Ou pega um livro aleatório numa lista de "top 10" e abandona no terceiro capítulo porque não era pra você naquele momento.
 
-[Sua descrição aqui]
+O problema não é falta de opção — é excesso de opção sem contexto.
 
 ### 2. A Solução (1 min)
-> Como seu agente resolve esse problema?
+A Cleo é uma assistente conversacional que recomenda filmes, séries e livros levando em conta o momento — não só o histórico.
 
-[Sua descrição aqui]
+Ela pergunta como você tá, quanto tempo tem, o que quer sentir. E a partir disso, sugere no máximo três opções com uma justificativa real para cada uma.
+
+Funciona localmente, sem precisar de conta ou assinatura, usando o modelo Mistral via Ollama.
 
 ### 3. Demonstração (1 min)
-> Mostre o agente funcionando (pode ser gravação de tela)
-
-[Descreva o que será mostrado]
+[Gravação de tela mostrando:]
+- Usuário digita: "quero algo pra assistir com minha mãe, ela não curte violência"
+- Cleo pergunta sobre gênero preferido
+- Usuário responde: "pode ser comédia ou drama leve"
+- Cleo retorna 3 sugestões com justificativa
+- Usuário diz que já viu uma delas
+- Cleo ajusta e sugere alternativa
 
 ### 4. Diferencial e Impacto (30 seg)
-> Por que essa solução é inovadora e qual é o impacto dela na sociedade?
+A diferença da Cleo pra um algoritmo de plataforma é a conversa. Ela não olha o que você assistiu semana passada — ela pergunta como você tá agora.
 
-[Sua descrição aqui]
+Roda 100% local, sem coleta de dados. É um protótipo, mas demonstra que recomendação contextualizada por linguagem natural é viável, acessível e faz sentido para qualquer pessoa.
 
 ---
 
@@ -39,6 +42,4 @@
 
 ## Link do Vídeo
 
-> Cole aqui o link do seu pitch (YouTube, Loom, Google Drive, etc.)
-
-[Link do vídeo]
+[Cole aqui o link do vídeo após a gravação]
