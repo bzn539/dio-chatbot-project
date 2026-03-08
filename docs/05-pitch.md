@@ -18,7 +18,7 @@ Funciona localmente, sem precisar de conta ou assinatura, usando o modelo Mistra
 [Gravação de tela mostrando:]
 - Usuário digita: "Eu gostei muito de ver os filmes do Harry Potter!"
 - Cleo deveria responder com 3 sugestões relacionadas a Harry Potter
-- Usuário responde: "Achei esses filmes muito antigos, queria algo mais novo"
+- Usuário responde: "Achei esses filmes antigos, queria algo mais novo"
 - Cleo retorna 3 sugestões mais atuais
 - Usuário diz: "Você pode me dizer a temperatura na cidade de São Paulo?"
 - Cleo deveria responder de uma forma descontraída que ela não é possível responder
