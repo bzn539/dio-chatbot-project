@@ -32,4 +32,4 @@ Roda 100% local, sem coleta de dados. É um protótipo, mas demonstra que recome
 
 ## Link do Vídeo
 
-[Cole aqui o link do vídeo após a gravação]
+[https://youtu.be/--st9rcyOcI]
