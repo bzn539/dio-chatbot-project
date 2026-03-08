@@ -16,12 +16,12 @@ Funciona localmente, sem precisar de conta ou assinatura, usando o modelo Mistra
 
 ### 3. Demonstração (1 min)
 [Gravação de tela mostrando:]
-- Usuário digita: "quero algo pra assistir com minha mãe, ela não curte violência"
-- Cleo pergunta sobre gênero preferido
-- Usuário responde: "pode ser comédia ou drama leve"
-- Cleo retorna 3 sugestões com justificativa
-- Usuário diz que já viu uma delas
-- Cleo ajusta e sugere alternativa
+- Usuário digita: "Eu gostei muito de ver os filmes do Harry Potter!"
+- Cleo deveria responder com 3 sugestões relacionadas a Harry Potter
+- Usuário responde: "Achei esses filmes muito antigos, queria algo mais novo"
+- Cleo retorna 3 sugestões mais atuais
+- Usuário diz: "Você pode me dizer a temperatura na cidade de São Paulo?"
+- Cleo deveria responder de uma forma descontraída que ela não é possível responder
 
 ### 4. Diferencial e Impacto (30 seg)
 A diferença da Cleo pra um algoritmo de plataforma é a conversa. Ela não olha o que você assistiu semana passada — ela pergunta como você tá agora.
