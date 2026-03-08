@@ -30,16 +30,6 @@ Roda 100% local, sem coleta de dados. É um protótipo, mas demonstra que recome
 
 ---
 
-## Checklist do Pitch
-
-- [ ] Duração máxima de 3 minutos
-- [ ] Problema claramente definido
-- [ ] Solução demonstrada na prática
-- [ ] Diferencial explicado
-- [ ] Áudio e vídeo com boa qualidade
-
----
-
 ## Link do Vídeo
 
 [Cole aqui o link do vídeo após a gravação]
